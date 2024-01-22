@@ -1,0 +1,45 @@
+name: Deploy to Google Cloud Run
+on:
+  release:
+    types: [published]
+
+env:
+  PROJECT_ID: ${{ secrets.GCP_PROJECT_ID }}
+  REPOSITORY: my-rep
+  SERVICE: skylarmay-api
+  GAR_LOCATION: us-east1
+  REGION: us-east1
+
+jobs:
+  deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout code
+      uses: actions/checkout@v4
+      with:
+        ref: ${{ github.ref }}
+
+    - name: "Authenticate with Google Cloud"
+      uses: 'google-github-actions/auth@v2'
+      with:
+        credentials_json: ${{ secrets.GCP_SA_KEY }}
+        project_id: ${{ secrets.GCP_PROJECT_ID }}
+
+    - name: Build and Push Container
+      run: |-
+        docker build -t "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}" ./
+        docker push "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ env.PROJECT_ID }}/${{ env.REPOSITORY }}/${{ env.SERVICE }}:${{ github.sha }}"
+
+    - name: "Deploy to Cloud Run"
+      id: 'deploy'
+      uses: "google-github-actions/deploy-cloudrun@v2"
+      with:
+        image: "${{ env.GAR_LOCATION }}-docker.pkg.dev/${{ secrets.GCP_PROJECT_ID }}/my-rep/skylarmay-api:latest"
+        service: "${{ env.SERVICE }}"
+        region: "${{ env.REGION }}"
+        platform: "managed"
+
+ # If required, use the Cloud Run url output in later steps
+    - name: Show Output
+      run: echo ${{ steps.deploy.outputs.url }}
