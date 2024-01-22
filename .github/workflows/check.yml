@@ -23,7 +23,7 @@ jobs:
           black --check .
       - name: Run tests with pytest
         env:
-          SE_EPHE_PATH: /opt/hostedtoolcache/Python/3.10.13/x64/lib/python3.10/site-packages/immanuel/resourses/ephemeris
+          SE_EPHE_PATH: ./data
         run: |
           pwd
           pytest
