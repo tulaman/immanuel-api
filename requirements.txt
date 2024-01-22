@@ -3,3 +3,4 @@ uvicorn
 immanuel
 pytest
 httpx
+black
