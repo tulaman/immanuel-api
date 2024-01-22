@@ -15,9 +15,7 @@ COPY requirements.txt .
 RUN pip install --no-cache-dir -r requirements.txt
 
 # Copy the content of the local src directory to the working directory
-COPY ./app.py /app
-
-COPY ./data /app/data
+COPY . /app
 
 # Specify the port number the container should expose
 EXPOSE 8000
