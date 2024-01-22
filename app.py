@@ -53,7 +53,7 @@ def planetary_positions(
         Query(
             title="Year",
             description="Year of birth (e.g. 1990)",
-            example=1990,
+            examples=[1990],
         ),
     ],
     month: Annotated[
@@ -61,7 +61,7 @@ def planetary_positions(
         Query(
             title="Month",
             description="Month of birth (e.g. 9)",
-            example=9,
+            examples=[9],
         ),
     ],
     day: Annotated[
@@ -69,7 +69,7 @@ def planetary_positions(
         Query(
             title="Day",
             description="Birth day (e.g. 5)",
-            example=5,
+            examples=[5],
         ),
     ],
     lat: Annotated[
@@ -77,7 +77,7 @@ def planetary_positions(
         Query(
             title="Latitude",
             description="Latitude of birth place (e.g. 40.7128)",
-            example=55.3948,
+            examples=[55.3948],
         ),
     ],
     lon: Annotated[
@@ -85,7 +85,7 @@ def planetary_positions(
         Query(
             title="Longitude",
             description="Longitude of birth place (e.g. 74.0060",
-            example=43.8399,
+            examples=[43.8399],
         ),
     ],
     hour: Annotated[
@@ -93,7 +93,7 @@ def planetary_positions(
         Query(
             title="Hour",
             description="Hour of birth, if you know it (e.g. 12)",
-            example=15,
+            examples=[15],
         ),
     ] = 0,
     min: Annotated[
@@ -101,7 +101,7 @@ def planetary_positions(
         Query(
             title="Minute",
             description="Minute of birth, if you know it (e.g. 01)",
-            example=1,
+            examples=[1],
         ),
     ] = 0,
     sec: Annotated[
@@ -109,7 +109,7 @@ def planetary_positions(
         Query(
             title="Second",
             description="Second of birth, if you know it (e.g. 53)",
-            example=53,
+            examples=[53],
         ),
     ] = 0,
     x_token: Annotated[
@@ -117,7 +117,7 @@ def planetary_positions(
         Header(
             title="X-Token",
             description="Your API key",
-            example="3bbfdde8842a5c44a0323518eec97cbe",
+            examples=["3bbfdde8842a5c44a0323518eec97cbe"],
         ),
     ] = None,
 ) -> PlanetPositionsResponse:
@@ -149,7 +149,6 @@ def natal_text(
         Query(
             title="Year",
             description="Year of birth (e.g. 1990)",
-            example=1990,
         ),
     ],
     month: Annotated[
@@ -157,7 +156,6 @@ def natal_text(
         Query(
             title="Month",
             description="Month of birth (e.g. 9)",
-            example=9,
         ),
     ],
     day: Annotated[
@@ -165,7 +163,6 @@ def natal_text(
         Query(
             title="Day",
             description="Birth day (e.g. 5)",
-            example=5,
         ),
     ],
     lat: Annotated[
@@ -173,7 +170,6 @@ def natal_text(
         Query(
             title="Latitude",
             description="Latitude of birth place (e.g. 40.7128)",
-            example=55.3948,
         ),
     ],
     lon: Annotated[
@@ -181,7 +177,6 @@ def natal_text(
         Query(
             title="Longitude",
             description="Longitude of birth place (e.g. 74.0060",
-            example=43.8399,
         ),
     ],
     hour: Annotated[
@@ -189,7 +184,6 @@ def natal_text(
         Query(
             title="Hour",
             description="Hour of birth, if you know it (e.g. 12)",
-            example=15,
         ),
     ] = 0,
     min: Annotated[
@@ -197,7 +191,6 @@ def natal_text(
         Query(
             title="Minute",
             description="Minute of birth, if you know it (e.g. 01)",
-            example=1,
         ),
     ] = 0,
     sec: Annotated[
@@ -205,7 +198,6 @@ def natal_text(
         Query(
             title="Second",
             description="Second of birth, if you know it (e.g. 53)",
-            example=53,
         ),
     ] = 0,
     x_token: Annotated[
@@ -213,7 +205,6 @@ def natal_text(
         Header(
             title="X-Token",
             description="Your API key",
-            example="3bbfdde8842a5c44a0323518eec97cbe",
         ),
     ] = None,
 ):
@@ -229,7 +220,6 @@ def natal_text(
         Query(
             title="Year",
             description="Year of birth (e.g. 1990)",
-            example=1990,
         ),
     ],
     month: Annotated[
@@ -237,7 +227,6 @@ def natal_text(
         Query(
             title="Month",
             description="Month of birth (e.g. 9)",
-            example=9,
         ),
     ],
     day: Annotated[
@@ -245,7 +234,6 @@ def natal_text(
         Query(
             title="Day",
             description="Birth day (e.g. 5)",
-            example=5,
         ),
     ],
     lat: Annotated[
@@ -253,7 +241,6 @@ def natal_text(
         Query(
             title="Latitude",
             description="Latitude of birth place (e.g. 40.7128)",
-            example=55.3948,
         ),
     ],
     lon: Annotated[
@@ -261,7 +248,6 @@ def natal_text(
         Query(
             title="Longitude",
             description="Longitude of birth place (e.g. 74.0060",
-            example=43.8399,
         ),
     ],
     hour: Annotated[
@@ -269,7 +255,6 @@ def natal_text(
         Query(
             title="Hour",
             description="Hour of birth, if you know it (e.g. 12)",
-            example=15,
         ),
     ] = 0,
     min: Annotated[
@@ -277,7 +262,6 @@ def natal_text(
         Query(
             title="Minute",
             description="Minute of birth, if you know it (e.g. 01)",
-            example=1,
         ),
     ] = 0,
     sec: Annotated[
@@ -285,7 +269,6 @@ def natal_text(
         Query(
             title="Second",
             description="Second of birth, if you know it (e.g. 53)",
-            example=53,
         ),
     ] = 0,
     x_token: Annotated[
@@ -293,7 +276,6 @@ def natal_text(
         Header(
             title="X-Token",
             description="Your API key",
-            example="3bbfdde8842a5c44a0323518eec97cbe",
         ),
     ] = None,
 ):
