@@ -12,4 +12,4 @@ def test_planetary_positions():
     )
     response_json = response.json()
     assert response.status_code == 200
-    assert response_json['success'] == 1
+    assert response_json["success"] == 1

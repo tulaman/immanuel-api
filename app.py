@@ -24,6 +24,7 @@ app = FastAPI(
     openapi_tags=tags_metadata,
 )
 
+
 class PlanetDescription(BaseModel):
     name: str
     latitude: str
