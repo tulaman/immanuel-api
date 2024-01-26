@@ -13,3 +13,15 @@ def test_planetary_positions():
     response_json = response.json()
     assert response.status_code == 200
     assert response_json["success"] == 1
+
+
+def test_retrograde_calendar():
+    response = client.get(
+        "/retrograde_calendar?year=2024&lat=55.3948&lon=43.8399",
+        headers={"X-Token": "coneofsilence"},
+    )
+    response_json = response.json()
+    assert response.status_code == 200
+    assert response_json["success"] == 1
+    assert response_json["data"][0]["planet"] == "Mercury"
+    assert len(response_json["data"][0]["periods"]) == 4

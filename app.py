@@ -1,18 +1,21 @@
-from datetime import datetime
-import json
+from datetime import datetime, date
 from fastapi import FastAPI, Query, Header
 from fastapi.responses import RedirectResponse, PlainTextResponse
 from typing import Annotated
 from pydantic import BaseModel
 import starlette.status as status
 from immanuel import charts
-from immanuel.const import chart
-from immanuel.classes.serialize import ToJSON
+from immanuel.const import chart, names
+from utils import retrograde_periods
 
 tags_metadata = [
     {
         "name": "planetary_positions",
         "description": "Planetary positions for a given date and time",
+    },
+    {
+        "name": "retrograde_calendar",
+        "description": "Retrograde calendar for a given year",
     }
 ]
 
@@ -40,6 +43,19 @@ class PlanetDescription(BaseModel):
 class PlanetPositionsResponse(BaseModel):
     success: int
     data: list[PlanetDescription]
+
+class Period(BaseModel):
+    start: date
+    end: date
+
+class PeriodsForPlanet(BaseModel):
+    planet: str
+    periods: list[Period]
+
+
+class RetrogradeCalendarResponse(BaseModel):
+    success: int
+    data: list[PeriodsForPlanet]
 
 
 @app.get("/")
@@ -85,7 +101,7 @@ def planetary_positions(
         float,
         Query(
             title="Longitude",
-            description="Longitude of birth place (e.g. 74.0060",
+            description="Longitude of birth place (e.g. 74.0060)",
             examples=[43.8399],
         ),
     ],
@@ -141,6 +157,55 @@ def planetary_positions(
                 }
             )
     return {"success": 1, "data": objects}
+
+
+@app.get("/retrograde_calendar", tags=["retrograde_calendar"])
+def retrograde_calendar(
+    year: Annotated[
+        int,
+        Query(
+            title="Year",
+            description="The year for which the calendar should be made",
+            examples=[1990],
+        ),
+    ],
+    lat: Annotated[
+        float,
+        Query(
+            title="Latitude",
+            description="Latitude of observer place",
+            examples=[55.3948],
+        ),
+    ],
+    lon: Annotated[
+        float,
+        Query(
+            title="Longitude",
+            description="Longitude of observer place",
+            examples=[43.8399],
+        ),
+    ],
+    x_token: Annotated[
+        str | None,
+        Header(
+            title="X-Token",
+            description="Your API key",
+            examples=["3bbfdde8842a5c44a0323518eec97cbe"],
+        ),
+    ] = None,
+) -> RetrogradeCalendarResponse:
+    retro_table = retrograde_periods(year, lat, lon)
+    response = []
+    for obj, days in retro_table.items():
+        asteroid = round(obj, -2) == chart.ASTEROID
+        name = names.ASTEROIDS[obj] if asteroid else names.PLANETS[obj]
+        response.append(
+            {
+                "planet": name,
+                "periods": [{"start": x[0].date(), "end": x[1].date()} for x in days],
+            }
+        )
+    return {"success": 1, "data": response}
 
 
 @app.get("/natal.json")
