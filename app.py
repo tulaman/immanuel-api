@@ -16,7 +16,7 @@ tags_metadata = [
     {
         "name": "retrograde_calendar",
         "description": "Retrograde calendar for a given year",
-    }
+    },
 ]
 
 app = FastAPI(
@@ -44,9 +44,11 @@ class PlanetPositionsResponse(BaseModel):
     success: int
     data: list[PlanetDescription]
 
+
 class Period(BaseModel):
     start: date
     end: date
+
 
 class PeriodsForPlanet(BaseModel):
     planet: str

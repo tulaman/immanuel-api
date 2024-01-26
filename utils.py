@@ -14,6 +14,7 @@ planets = [
     chart.CHIRON,
 ]
 
+
 def retrograde_periods(year, lat, lon):
     retro_table = {obj: [] for obj in planets}
 
@@ -59,7 +60,7 @@ def retrograde_periods(year, lat, lon):
                     (buffer[obj["index"]]["start"], buffer[obj["index"]]["end"])
                 )
         current_day = current_day + timedelta(minutes=30)
-    
+
     for obj in buffer:
         if (
             buffer[obj]["current_direction"] == calc.RETROGRADE
@@ -67,5 +68,5 @@ def retrograde_periods(year, lat, lon):
             and buffer[obj]["end"] == None
         ):
             retro_table[obj].append((buffer[obj]["start"], end_day))
-    
+
     return retro_table
