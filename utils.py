@@ -15,13 +15,17 @@ planets = [
 ]
 
 
-def retrograde_periods(year, lat, lon):
+def retrograde_periods(n, lat, lon):
     retro_table = {obj: [] for obj in planets}
 
     coords = [lat, lon]
 
-    start_day = datetime(year, 1, 1, 0, 0, 0, 0, None)
-    end_day = datetime(year + 1, 1, 1, 0, 0, 0, 0, None)
+    # Get the current date and time
+    now = datetime.now()
+    end_date = now + timedelta(days=n * 30)
+
+    start_day = datetime(now.year, now.month, now.day, 0, 0, 0, 0, None)
+    end_day = datetime(end_date.year, end_date.month, end_date.day, 0, 0, 0, 0, None)
 
     buffer = {
         obj: {

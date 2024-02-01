@@ -163,12 +163,12 @@ def planetary_positions(
 
 @app.get("/retrograde_calendar", tags=["retrograde_calendar"])
 def retrograde_calendar(
-    year: Annotated[
+    n: Annotated[
         int,
         Query(
-            title="Year",
-            description="The year for which the calendar should be made",
-            examples=[1990],
+            title="N of months",
+            description="Number of next months to show calendar for",
+            examples=[12],
         ),
     ],
     lat: Annotated[
@@ -196,7 +196,7 @@ def retrograde_calendar(
         ),
     ] = None,
 ) -> RetrogradeCalendarResponse:
-    retro_table = retrograde_periods(year, lat, lon)
+    retro_table = retrograde_periods(n, lat, lon)
     response = []
     for obj, days in retro_table.items():
         asteroid = round(obj, -2) == chart.ASTEROID
