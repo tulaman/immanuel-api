@@ -25,3 +25,15 @@ def test_retrograde_calendar():
     assert response_json["success"] == 1
     assert response_json["data"][0]["planet"] == "Mercury"
     assert len(response_json["data"][0]["periods"]) == 6
+
+
+def test_get_weekly_forecast_data():
+    response = client.get(
+        "/get_weekly_forecast_data?start_date=2024-03-19",
+        headers={"X-Token": "coneofsilence"},
+    )
+    response_json = response.json()
+    assert response.status_code == 200
+    assert response_json["success"] == 1
+    assert len(response_json["data"]) == 7
+    assert len(response_json["data"]["2024-03-19"]["planets"]) == 8

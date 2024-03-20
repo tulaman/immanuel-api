@@ -1,4 +1,4 @@
-from datetime import datetime, date
+from datetime import datetime, date, time
 from fastapi import FastAPI, Query, Header
 from fastapi.responses import RedirectResponse, PlainTextResponse
 from typing import Annotated
@@ -6,7 +6,7 @@ from pydantic import BaseModel
 import starlette.status as status
 from immanuel import charts
 from immanuel.const import chart, names
-from utils import retrograde_periods
+from utils import retrograde_periods, weekly_forecast_data
 
 tags_metadata = [
     {
@@ -417,3 +417,19 @@ def composite(
 def solar_returns(year: int, month: int, day: int, hour: int, lat: float, lon: float):
     native = charts.Subject(datetime(year, month, day, hour, 0, 0), lat, lon)
     return charts.SolarReturns(native)
+
+
+@app.get("/get_weekly_forecast_data")
+def get_weekly_forecast_data(
+    start_date: Annotated[
+        date,
+        Query(
+            title="Start date",
+            description="Start date for the forecast",
+            examples=[date.today()],
+        ),
+    ],
+):
+    datetime_obj = datetime.combine(start_date, time.min)
+    wfd = weekly_forecast_data(datetime_obj)
+    return {"success": 1, "data": wfd}
