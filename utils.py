@@ -102,13 +102,12 @@ def weekly_forecast_data(start_date):
         for index, aspects in natal.aspects.items():
             for aspect in aspects.values():
                 aspect_key = aspect._active_name + " " + aspect._passive_name
-                if aspect.orb < 8 and aspect_key not in aspects_set:
+                if aspect_key not in aspects_set:
                     planet_aspects.append(
                         {
                             "active": aspect._active_name,
                             "passive": aspect._passive_name,
                             "aspect": aspect.aspect,
-                            "orb": aspect.orb,
                             "type": aspect.type,
                         }
                     )
