@@ -17,6 +17,10 @@ tags_metadata = [
         "name": "retrograde_calendar",
         "description": "Retrograde calendar for a given year",
     },
+    {
+        "name": "get_weekly_forecast_data",
+        "description": "Get weekly forecast data - planet positions, major aspects, retrograde etc - for a given date",
+    },
 ]
 
 app = FastAPI(
@@ -38,7 +42,6 @@ class PlanetDescription(BaseModel):
     speed: float
     distance: float
     movement: str
-
 
 class PlanetPositionsResponse(BaseModel):
     success: int
@@ -419,7 +422,7 @@ def solar_returns(year: int, month: int, day: int, hour: int, lat: float, lon: f
     return charts.SolarReturns(native)
 
 
-@app.get("/get_weekly_forecast_data")
+@app.get("/get_weekly_forecast_data", tags=["get_weekly_forecast_data"])
 def get_weekly_forecast_data(
     start_date: Annotated[
         date,

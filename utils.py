@@ -94,6 +94,7 @@ def weekly_forecast_data(start_date):
             planet_positions[object.name] = {
                 "sign": object.sign.name,
                 "house": object.house.number,
+                "movement": object.movement.formatted,
             }
 
         planet_aspects = []
@@ -114,6 +115,7 @@ def weekly_forecast_data(start_date):
                     aspects_set.add(aspect_key)
 
         weekly_data[date.strftime("%Y-%m-%d")] = {
+            "moon_phase": natal.moon_phase.formatted,
             "planets": planet_positions,
             "aspects": planet_aspects,
         }
