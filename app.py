@@ -47,6 +47,7 @@ class PlanetDescription(BaseModel):
     distance: float
     movement: str
 
+
 class PlanetPositionsResponse(BaseModel):
     success: int
     data: list[PlanetDescription]

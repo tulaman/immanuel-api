@@ -26,6 +26,7 @@ planet_names = [
     "Pluto",
 ]
 
+
 def retrograde_periods(n, lat, lon):
     retro_table = {obj: [] for obj in planets}
 
