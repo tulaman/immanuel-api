@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from immanuel import charts
-from immanuel.tools import calculate, convert, date, ephemeris
+from immanuel.tools import calculate, date, ephemeris
 from immanuel.const import chart, calc
 from immanuel.setup import settings
 
@@ -15,6 +15,16 @@ planets = [
     chart.PLUTO,
 ]
 
+planet_names = [
+    "Mercury",
+    "Venus",
+    "Mars",
+    "Jupiter",
+    "Saturn",
+    "Uranus",
+    "Neptune",
+    "Pluto",
+]
 
 def retrograde_periods(n, lat, lon):
     retro_table = {obj: [] for obj in planets}
@@ -120,3 +130,57 @@ def weekly_forecast_data(start_date):
         }
 
     return weekly_data
+
+
+def yearly_forecast_data(start_date):
+    settings.set({"objects": planets})
+
+    yearly_data = {}
+    cursor = {}
+    planet_positions = {}
+    for object in planet_names:
+        planet_positions[object] = {"sign": [], "movement": []}
+
+    for i in range(365):  # for each day of week
+        date = start_date + timedelta(days=i)
+
+        native = charts.Subject(date_time=date, latitude=0.0, longitude=0.0)
+        natal = charts.Natal(native)
+
+        for object in natal.objects.values():
+            if cursor.get(object.name) is None:
+                cursor[object.name] = {}
+                for key in ["sign", "movement"]:
+                    attr = getattr(object, key)
+                    cursor[object.name][key] = {
+                        "value": attr.formatted if key == "movement" else attr.name,
+                        "start": date,
+                    }
+            else:
+                for key in ["sign", "movement"]:
+                    attr = getattr(object, key)
+                    value = attr.formatted if key == "movement" else attr.name
+                    if cursor[object.name][key]["value"] != value:
+                        period = f'{cursor[object.name][key]["start"].strftime("%Y-%m-%d")} - {(date - timedelta(days=1)).strftime("%Y-%m-%d")}'
+                        planet_positions[object.name][key].append(
+                            {
+                                "period": period,
+                                "value": cursor[object.name][key]["value"],
+                            }
+                        )
+                        cursor[object.name][key] = {
+                            "value": value,
+                            "start": date,
+                        }
+
+    for object in planet_names:
+        for key in ["sign", "movement"]:
+            period = f'{cursor[object][key]["start"].strftime("%Y-%m-%d")} - {(start_date + timedelta(days=365)).strftime("%Y-%m-%d")}'
+            planet_positions[object][key].append(
+                {
+                    "period": period,
+                    "value": cursor[object][key]["value"],
+                }
+            )
+
+    return planet_positions

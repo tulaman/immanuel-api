@@ -37,3 +37,17 @@ def test_get_weekly_forecast_data():
     assert response_json["success"] == 1
     assert len(response_json["data"]) == 7
     assert len(response_json["data"]["2024-03-19"]["planets"]) == 8
+
+
+def test_get_yearly_forecast_data():
+    response = client.get(
+        "/get_yearly_forecast_data?start_date=2024-04-01",
+        headers={"X-Token": "coneofsilence"},
+    )
+    response_json = response.json()
+    assert response.status_code == 200
+    assert response_json["success"] == 1
+    assert len(response_json["data"]) == 8
+    assert len(response_json["data"]["Mercury"]) == 2
+    assert "sign" in response_json["data"]["Mercury"]
+    assert "movement" in response_json["data"]["Mercury"]

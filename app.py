@@ -6,7 +6,7 @@ from pydantic import BaseModel
 import starlette.status as status
 from immanuel import charts
 from immanuel.const import chart, names
-from utils import retrograde_periods, weekly_forecast_data
+from utils import retrograde_periods, weekly_forecast_data, yearly_forecast_data
 
 tags_metadata = [
     {
@@ -20,6 +20,10 @@ tags_metadata = [
     {
         "name": "get_weekly_forecast_data",
         "description": "Get weekly forecast data - planet positions, major aspects, retrograde etc - for a given date",
+    },
+    {
+        "name": "get_yearly_forecast_data",
+        "description": "Get yearly forecast data - retrogrades, direct stations and ingresses represented as periods of time for each planet",
     },
 ]
 
@@ -436,3 +440,19 @@ def get_weekly_forecast_data(
     datetime_obj = datetime.combine(start_date, time.min)
     wfd = weekly_forecast_data(datetime_obj)
     return {"success": 1, "data": wfd}
+
+
+@app.get("/get_yearly_forecast_data", tags=["get_yearly_forecast_data"])
+def get_yearly_forecast_data(
+    start_date: Annotated[
+        date,
+        Query(
+            title="Start date",
+            description="Start date for the forecast",
+            examples=[date.today()],
+        ),
+    ],
+):
+    datetime_obj = datetime.combine(start_date, time.min)
+    yfd = yearly_forecast_data(datetime_obj)
+    return {"success": 1, "data": yfd}
