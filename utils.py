@@ -136,11 +136,11 @@ def weekly_forecast_data(start_date):
 def yearly_forecast_data(start_date):
     settings.set({"objects": planets})
 
-    yearly_data = {}
+    attributes = ["sign", "house", "movement"]
     cursor = {}
     planet_positions = {}
     for object in planet_names:
-        planet_positions[object] = {"sign": [], "movement": []}
+        planet_positions[object] = {"sign": [], "house": [], "movement": []}
 
     for i in range(365):  # for each day of week
         date = start_date + timedelta(days=i)
@@ -151,14 +151,14 @@ def yearly_forecast_data(start_date):
         for object in natal.objects.values():
             if cursor.get(object.name) is None:
                 cursor[object.name] = {}
-                for key in ["sign", "movement"]:
+                for key in attributes:
                     attr = getattr(object, key)
                     cursor[object.name][key] = {
                         "value": attr.formatted if key == "movement" else attr.name,
                         "start": date,
                     }
             else:
-                for key in ["sign", "movement"]:
+                for key in attributes:
                     attr = getattr(object, key)
                     value = attr.formatted if key == "movement" else attr.name
                     if cursor[object.name][key]["value"] != value:
@@ -175,7 +175,7 @@ def yearly_forecast_data(start_date):
                         }
 
     for object in planet_names:
-        for key in ["sign", "movement"]:
+        for key in attributes:
             period = f'{cursor[object][key]["start"].strftime("%Y-%m-%d")} - {(start_date + timedelta(days=365)).strftime("%Y-%m-%d")}'
             planet_positions[object][key].append(
                 {
