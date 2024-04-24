@@ -24,7 +24,25 @@ def test_retrograde_calendar():
     assert response.status_code == 200
     assert response_json["success"] == 1
     assert response_json["data"][0]["planet"] == "Mercury"
-    assert len(response_json["data"][0]["periods"]) == 6
+    assert len(response_json["data"][0]["periods"]) == 7
+
+
+def test_get_daily_forecast_data():
+    response = client.get(
+        "/get_daily_forecast_data?start_date=2024-03-19",
+        headers={"X-Token": "coneofsilence"},
+    )
+    response_json = response.json()
+    assert response.status_code == 200
+    assert response_json["success"] == 1
+    assert len(response_json["data"]) == 3
+    assert len(response_json["data"]["planets"]) == 8
+    assert "moon_phase" in response_json["data"]
+    assert "planets" in response_json["data"]
+    assert "aspects" in response_json["data"]
+    assert "sign" in response_json["data"]["planets"]["Mercury"]
+    assert "house" in response_json["data"]["planets"]["Mercury"]
+    assert "movement" in response_json["data"]["planets"]["Mercury"]
 
 
 def test_get_weekly_forecast_data():
@@ -48,6 +66,6 @@ def test_get_yearly_forecast_data():
     assert response.status_code == 200
     assert response_json["success"] == 1
     assert len(response_json["data"]) == 8
-    assert len(response_json["data"]["Mercury"]) == 2
+    assert len(response_json["data"]["Mercury"]) == 3
     assert "sign" in response_json["data"]["Mercury"]
     assert "movement" in response_json["data"]["Mercury"]

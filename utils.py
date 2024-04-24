@@ -88,6 +88,11 @@ def retrograde_periods(n, lat, lon):
     return retro_table
 
 
+def daily_forecast_data(start_date):
+    settings.set({"objects": planets})
+    return day_forecast(start_date)
+
+
 def weekly_forecast_data(start_date):
     settings.set({"objects": planets})
 
@@ -96,41 +101,44 @@ def weekly_forecast_data(start_date):
 
     for i in range(7):  # for each day of week
         date = start_date + timedelta(days=i)
-
-        native = charts.Subject(date_time=date, latitude=0.0, longitude=0.0)
-        natal = charts.Natal(native)
-
-        planet_positions = {}
-        for object in natal.objects.values():
-            planet_positions[object.name] = {
-                "sign": object.sign.name,
-                "house": object.house.number,
-                "movement": object.movement.formatted,
-            }
-
-        planet_aspects = []
-        aspects_set = set()
-        for index, aspects in natal.aspects.items():
-            for aspect in aspects.values():
-                aspect_key = aspect._active_name + " " + aspect._passive_name
-                if aspect_key not in aspects_set:
-                    planet_aspects.append(
-                        {
-                            "active": aspect._active_name,
-                            "passive": aspect._passive_name,
-                            "aspect": aspect.aspect,
-                            "type": aspect.type,
-                        }
-                    )
-                    aspects_set.add(aspect_key)
-
-        weekly_data[date.strftime("%Y-%m-%d")] = {
-            "moon_phase": natal.moon_phase.formatted,
-            "planets": planet_positions,
-            "aspects": planet_aspects,
-        }
+        weekly_data[date.strftime("%Y-%m-%d")] = day_forecast(date)
 
     return weekly_data
+
+
+def day_forecast(date):
+    native = charts.Subject(date_time=date, latitude=0.0, longitude=0.0)
+    natal = charts.Natal(native)
+
+    planet_positions = {}
+    for object in natal.objects.values():
+        planet_positions[object.name] = {
+            "sign": object.sign.name,
+            "house": object.house.number,
+            "movement": object.movement.formatted,
+        }
+
+    planet_aspects = []
+    aspects_set = set()
+    for index, aspects in natal.aspects.items():
+        for aspect in aspects.values():
+            aspect_key = aspect._active_name + " " + aspect._passive_name
+            if aspect_key not in aspects_set:
+                planet_aspects.append(
+                    {
+                        "active": aspect._active_name,
+                        "passive": aspect._passive_name,
+                        "aspect": aspect.aspect,
+                        "type": aspect.type,
+                    }
+                )
+                aspects_set.add(aspect_key)
+
+    return {
+        "moon_phase": natal.moon_phase.formatted,
+        "planets": planet_positions,
+        "aspects": planet_aspects,
+    }
 
 
 def yearly_forecast_data(start_date):
