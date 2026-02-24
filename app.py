@@ -431,7 +431,15 @@ def composite(
 
 
 @app.post("/solar_returns")
-def solar_returns(year: int, month: int, day: int, hour: int, lat: float, lon: float, solar_return_year: int):
+def solar_returns(
+    year: int,
+    month: int,
+    day: int,
+    hour: int,
+    lat: float,
+    lon: float,
+    solar_return_year: int,
+):
     native = charts.Subject(datetime(year, month, day, hour, 0, 0), lat, lon)
     return charts.SolarReturn(native, solar_return_year)
 
