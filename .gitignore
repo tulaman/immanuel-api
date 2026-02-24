@@ -4,3 +4,4 @@ __pycache__
 .github/workflows
 .devcontainer/devcontainer.json
 .github/dependabot.yml
+.claude
