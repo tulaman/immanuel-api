@@ -387,7 +387,7 @@ def transits(year: int, month: int, day: int, hour: int, lat: float, lon: float)
 @app.post("/progressions")
 def progressions(year: int, month: int, day: int, hour: int, lat: float, lon: float):
     native = charts.Subject(datetime(year, month, day, hour, 0, 0), lat, lon)
-    return charts.Progressed(native)
+    return charts.Progressed(native, datetime.now())
 
 
 @app.post("/synastry")
@@ -431,9 +431,9 @@ def composite(
 
 
 @app.post("/solar_returns")
-def solar_returns(year: int, month: int, day: int, hour: int, lat: float, lon: float):
+def solar_returns(year: int, month: int, day: int, hour: int, lat: float, lon: float, solar_return_year: int):
     native = charts.Subject(datetime(year, month, day, hour, 0, 0), lat, lon)
-    return charts.SolarReturns(native)
+    return charts.SolarReturn(native, solar_return_year)
 
 
 @app.get("/get_daily_forecast_data", tags=["get_daily_forecast_data"])
