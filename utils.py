@@ -1,6 +1,6 @@
 from datetime import datetime, timedelta
 from immanuel import charts
-from immanuel.tools import calculate, date, ephemeris
+from immanuel.tools import date, ephemeris
 from immanuel.const import chart, calc
 from immanuel.setup import settings
 
@@ -51,7 +51,7 @@ def retrograde_periods(n, lat, lon):
     current_day = start_day
     while current_day < end_day:
         day_jd = date.to_jd(current_day)
-        objects = ephemeris.objects(
+        objects = ephemeris.get_objects(
             tuple(planets),
             day_jd,
             *coords,
@@ -59,7 +59,7 @@ def retrograde_periods(n, lat, lon):
             calc.DAY_NIGHT_FORMULA,
         ).values()
         for obj in list(objects):
-            movement = calculate.object_movement(obj)
+            movement = ephemeris.object_movement(obj)
             if (
                 movement == calc.RETROGRADE
                 and buffer[obj["index"]]["current_direction"] == calc.DIRECT
